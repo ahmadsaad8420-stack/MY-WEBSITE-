@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; font-src 'self'; img-src 'self' data:; connect-src 'self' https://api.github.com; manifest-src 'self'; worker-src 'self'; base-uri 'self'; form-action 'self'; object-src 'none'; frame-src 'none'">
+  <script src="js/boot.js?v=7"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Contact | Saad Sheikh</title>
+  <meta name="description" content="Contact Saad Sheikh using the contact form, Telegram or GitHub.">
+  <meta name="robots" content="index, follow">
+  <meta name="author" content="Saad Sheikh">
+  <meta name="color-scheme" content="dark light">
+  <meta name="theme-color" content="#080B14" media="(prefers-color-scheme: dark)">
+  <meta name="theme-color" content="#F7F7F5" media="(prefers-color-scheme: light)">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Saad Sheikh">
+  <meta property="og:title" content="Contact | Saad Sheikh">
+  <meta property="og:description" content="Contact Saad Sheikh using the contact form, Telegram or GitHub.">
+  <meta property="og:url" content="https://saadsheikh.bond/contact">
+  <meta property="og:image" content="https://saadsheikh.bond/assets/images/og-image.jpg">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Contact | Saad Sheikh">
+  <meta name="twitter:description" content="Contact Saad Sheikh using the contact form, Telegram or GitHub.">
+  <meta name="twitter:image" content="https://saadsheikh.bond/assets/images/og-image.jpg">
+  <link rel="canonical" href="https://saadsheikh.bond/contact">
+  <link rel="icon" href="favicon-32.png?v=7" sizes="32x32" type="image/png">
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="assets/icons/apple-touch-icon.png">
+  <link rel="manifest" href="manifest.json">
+  <link rel="stylesheet" href="css/pages.css?v=7">
+</head>
+<body>
+  <a class="skip-link" href="#main-content">Skip to content</a>
+  <header class="top"><div class="wrap">
+    <a class="brand" href="index.html" aria-label="Saad Sheikh home"><span>SAAD</span><span>SHEIKH</span></a>
+    <nav class="menu" aria-label="Primary navigation"><a href="index.html">Home</a><a href="about.html">About</a><a href="index.html#projects">Projects</a><a href="contact.html" aria-current="page">Contact</a><a href="privacy-policy.html">Privacy Policy</a><a href="terms.html">Terms</a></nav>
+  </div></header>
+  <main id="main-content"><div class="wrap">
+    <h1>Contact</h1>
+    <p class="meta">I read every message. I usually reply within a few days.</p>
+    <p class="lead">Send me a message with the form below, or reach me on Telegram or GitHub.</p>
+
+    <form class="card" name="contact" action="/thanks" method="POST" data-netlify="true" data-netlify-honeypot="bot-field">
+      <input type="hidden" name="form-name" value="contact">
+      <label for="name">Name</label>
+      <input id="name" name="name" type="text" autocomplete="name" required minlength="2" maxlength="80">
+      <label for="email">Email</label>
+      <input id="email" name="email" type="email" autocomplete="email" required maxlength="120">
+      <label for="subject">Subject</label>
+      <input id="subject" name="subject" type="text" required minlength="3" maxlength="120">
+      <label for="message">Message</label>
+      <textarea id="message" name="message" rows="7" required minlength="10" maxlength="3000"></textarea>
+      <input class="hp" name="bot-field" type="text" tabindex="-1" autocomplete="off" aria-hidden="true" maxlength="100">
+      <p><small>By sending this form you agree to the <a href="privacy-policy.html">Privacy Policy</a>.</small></p>
+      <button class="btn btn--primary" type="submit">Send message</button>
+    </form>
+
+    <h2>Other ways to reach me</h2>
+    <div class="links">
+      <a class="btn" href="https://t.me/saadahmad9k" target="_blank" rel="noopener noreferrer">Telegram</a>
+      <a class="btn" href="https://github.com/ahmadsaad8420-stack" target="_blank" rel="noopener noreferrer">GitHub</a>
+      <a class="btn" href="index.html#contact">Email, phone and WhatsApp</a>
+    </div>
+    <p>My email, phone and WhatsApp details are on the home page Contact section. They are filled in by JavaScript to keep them away from spam bots.</p>
+
+  </div></main>
+  <footer class="foot"><div class="wrap">
+    <p>© Saad Sheikh. All rights reserved.</p>
+    <p><a href="privacy-policy.html">Privacy Policy</a><a href="terms.html">Terms</a><a href="index.html#contact">Contact</a></p>
+  </div></footer>
+</body>
+</html>
