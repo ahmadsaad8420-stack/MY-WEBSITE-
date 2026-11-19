@@ -1,6 +1,6 @@
 /* Saad Sheikh portfolio service worker. Versioned cache prevents stale deployments. */
 'use strict';
-const CACHE = 'saad-portfolio-pro-v18';
+const CACHE = 'saad-portfolio-pro-v19';
 const CORE = [
   './', './404.html',
   'index.html', 'about.html', 'contact.html', 'privacy-policy.html', 'terms.html', 'thanks.html',
