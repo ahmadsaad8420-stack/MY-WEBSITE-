@@ -1,0 +1,91 @@
+/* Shared by About, Contact, Privacy Policy, Terms, Thanks and 404. Tokens, header, footer, buttons and form fields come from style.css. */
+.page { padding: calc(var(--header-height) + 56px) 0 88px; min-height: 70vh; }
+.page .wrap { width: min(calc(100% - 32px), 780px); margin-inline: auto; }
+.page h1 { margin: 0 0 10px; font-size: clamp(2.2rem, 6vw, 3.6rem); line-height: 1.05; letter-spacing: -.045em; }
+.page h2 { margin: 44px 0 8px; font-size: 22px; letter-spacing: -.02em; scroll-margin-top: 96px; }
+.page h3 { margin: 24px 0 6px; font-size: 17px; }
+.page p, .page li { color: var(--muted); }
+.page .lead { font-size: 18px; color: var(--text); }
+.page .meta { margin: 0 0 32px; font-size: 14px; color: var(--muted-2); }
+.page ul, .page ol { padding-left: 22px; }
+.page code { padding: 1px 6px; border-radius: 6px; background: var(--card-strong); color: var(--text); font-size: .9em; }
+.page a:not(.button) { color: var(--accent-light); text-underline-offset: 3px; }
+.page a:not(.button):hover { color: var(--accent); }
+.about-figure { margin: 24px 0 8px; }
+.about-figure img { width: min(100%, 240px); height: auto; border-radius: var(--radius); border: 1px solid var(--border); box-shadow: var(--shadow); }
+.links { display: flex; flex-wrap: wrap; gap: 12px; margin: 20px 0; }
+.links--center { justify-content: center; }
+.page .contact-form { margin: 24px 0 8px; }
+
+.callout, .toc, .table-wrap { border: 1px solid var(--border); background: var(--card); border-radius: var(--radius-sm); }
+.callout { border-left: 4px solid var(--accent); padding: 16px 20px; margin: 24px 0; }
+.callout h2 { margin: 0 0 8px; font-size: 17px; }
+.callout ul { margin: 0; }
+.toc { padding: 16px 20px; margin: 24px 0; }
+.toc strong { display: block; margin-bottom: 8px; font-size: 14px; color: var(--text); }
+.toc ol { margin: 0; padding-left: 20px; columns: 2; column-gap: 32px; font-size: 14px; }
+.toc li { break-inside: avoid; margin: 2px 0; }
+.page .toc a { text-decoration: none; }
+.page .toc a:hover { text-decoration: underline; }
+.table-wrap { overflow-x: auto; margin: 16px 0; }
+table { border-collapse: collapse; width: 100%; min-width: 640px; font-size: 14px; }
+th, td { text-align: left; vertical-align: top; padding: 10px 14px; border-bottom: 1px solid var(--border); }
+th { background: var(--card-strong); color: var(--text); font-weight: 700; white-space: nowrap; }
+td { color: var(--muted); }
+tr:last-child td { border-bottom: 0; }
+
+.page--center { display: grid; place-items: center; text-align: center; }
+.error-code { margin: 0; font-size: clamp(5rem, 20vw, 9rem); font-weight: 800; letter-spacing: -.06em; line-height: 1; color: var(--accent); }
+
+@media (max-width: 640px) { .toc ol { columns: 1; } }
+@media print {
+  .site-header, .footer, .toc, .skip-link { display: none; }
+  body, body::before { background: #fff; }
+  .page { padding-top: 0; }
+  .page, .page p, .page li, td { color: #222; }
+}
+
+/* Matching 3D glass treatment for inner pages. */
+.page .about-figure img, .page .callout, .page .toc, .page .table-wrap,
+.page .contact-form, .page .error-code { transform-style: preserve-3d; }
+.page .callout, .page .toc, .page .table-wrap {
+  box-shadow: 0 16px 38px rgba(0,45,120,.12), inset 0 1px 0 rgba(255,255,255,.04);
+  transition: border-color .25s ease, box-shadow .25s ease, transform .25s ease;
+}
+.page .callout:hover, .page .toc:hover, .page .table-wrap:hover {
+  border-color: rgba(var(--accent-rgb),.42);
+  box-shadow: 0 22px 48px rgba(0,65,160,.17);
+}
+.page .about-figure img { box-shadow: 0 22px 55px rgba(0,50,140,.22); }
+@media (prefers-reduced-motion: reduce) { .page .callout, .page .toc, .page .table-wrap { transition: none; } }
+
+/* Consistent futuristic depth on every secondary page. */
+.page { position: relative; isolation: isolate; perspective: 1200px; }
+.page::before, .page::after {
+  content: ""; position: absolute; z-index: -1; width: min(42vw,420px); aspect-ratio: 1;
+  border: 1px solid rgba(var(--accent-rgb),.13); border-radius: 50%;
+  box-shadow: 0 0 0 24px rgba(var(--accent-rgb),.025), 0 0 0 52px rgba(var(--accent-rgb),.018), inset 0 0 55px rgba(var(--accent-rgb),.045);
+  pointer-events: none;
+}
+.page::before { top: 7%; right: -12%; }
+.page::after { bottom: 2%; left: -18%; width: min(32vw,300px); }
+.page .wrap > h1, .page .wrap > .lead, .page .wrap > .meta { position: relative; }
+.page .wrap > h1 { text-shadow: 0 12px 38px rgba(var(--accent-rgb),.16); }
+.page .wrap > :is(.callout,.toc,.table-wrap,.contact-form) {
+  border-color: rgba(var(--accent-rgb),.18);
+  box-shadow: 0 20px 48px rgba(0,45,110,.12), inset 0 1px 0 rgba(255,255,255,.055);
+  backdrop-filter: blur(14px);
+}
+.page .contact-form input, .page .contact-form textarea, .page .contact-form select {
+  border-color: var(--border-strong); transition: border-color .2s ease, box-shadow .2s ease, transform .2s ease;
+}
+.page .contact-form :is(input,textarea,select):focus {
+  border-color: var(--accent); box-shadow: 0 0 0 4px rgba(var(--accent-rgb),.12);
+}
+@media (max-width: 640px) {
+  .page::before { right: -32%; width: 65vw; }
+  .page::after { left: -35%; width: 52vw; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .page::before, .page::after { box-shadow: none; }
+}
