@@ -2,16 +2,14 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; font-src 'self'; img-src 'self' data:; connect-src 'self' https://api.github.com; manifest-src 'self'; worker-src 'self'; base-uri 'self'; form-action 'self'; object-src 'none'; frame-src 'none'">
-  <script src="js/boot.js?v=7"></script>
+  <script src="js/boot.js?v=boot-v16"></script>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Terms of Use | Saad Sheikh</title>
   <meta name="description" content="Terms of use for saadsheikh.bond, the personal portfolio of Saad Sheikh: ownership, acceptable use, security reports and liability.">
   <meta name="robots" content="index, follow">
   <meta name="author" content="Saad Sheikh">
   <meta name="color-scheme" content="dark light">
-  <meta name="theme-color" content="#080B14" media="(prefers-color-scheme: dark)">
-  <meta name="theme-color" content="#F7F7F5" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#080D18" id="themeColorMeta">
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="Saad Sheikh">
   <meta property="og:title" content="Terms of Use | Saad Sheikh">
@@ -23,21 +21,38 @@
   <meta name="twitter:description" content="Terms of use for saadsheikh.bond, the personal portfolio of Saad Sheikh: ownership, acceptable use, security reports and liability.">
   <meta name="twitter:image" content="https://saadsheikh.bond/assets/images/og-image.jpg">
   <link rel="canonical" href="https://saadsheikh.bond/terms">
-  <link rel="icon" href="favicon-32.png?v=7" sizes="32x32" type="image/png">
+  <link rel="icon" href="favicon-32.png?v=10" sizes="32x32" type="image/png">
   <link rel="icon" href="favicon.svg" type="image/svg+xml">
   <link rel="apple-touch-icon" href="assets/icons/apple-touch-icon.png">
   <link rel="manifest" href="manifest.json">
-  <link rel="stylesheet" href="css/pages.css?v=7">
+  <link rel="stylesheet" href="css/icons.css?v=icons-v18">
+  <link rel="stylesheet" href="css/style.css?v=portfolio-pro-v18">
+  <link rel="stylesheet" href="css/pages.css?v=pages-v16">
 </head>
 <body>
   <a class="skip-link" href="#main-content">Skip to content</a>
-  <header class="top"><div class="wrap">
-    <a class="brand" href="index.html" aria-label="Saad Sheikh home"><span>SAAD</span><span>SHEIKH</span></a>
-    <nav class="menu" aria-label="Primary navigation"><a href="index.html">Home</a><a href="about.html">About</a><a href="index.html#projects">Projects</a><a href="contact.html">Contact</a><a href="privacy-policy.html">Privacy Policy</a><a href="terms.html" aria-current="page">Terms</a></nav>
-  </div></header>
-  <main id="main-content"><div class="wrap">
+  <header class="site-header scrolled" id="siteHeader">
+    <nav class="navbar container" aria-label="Primary navigation">
+      <a class="brand" href="/" aria-label="Saad Sheikh home"><span>SAAD</span><span>SHEIKH</span></a>
+      <button class="menu-toggle" id="menuToggle" type="button" aria-expanded="false" aria-controls="primaryMenu" aria-label="Open navigation menu"><span></span><span></span><span></span></button>
+      <div class="nav-shell" id="primaryMenu">
+        <ul class="nav-links">
+          <li><a class="nav-link" href="/#home">Home</a></li>
+          <li><a class="nav-link" href="/about">About</a></li>
+          <li><a class="nav-link" href="/#what-i-do">What I Do</a></li>
+          <li><a class="nav-link" href="/#skills">Skills</a></li>
+          <li><a class="nav-link" href="/#journey">Journey</a></li>
+          <li><a class="nav-link" href="/#projects">Projects</a></li>
+          <li><a class="nav-link" href="/#goals">Goals</a></li>
+          <li><a class="nav-link" href="/contact">Contact</a></li>
+        </ul>
+        <div class="nav-actions"><button class="icon-button" id="themeToggle" type="button" aria-label="Switch to dark mode" title="Switch theme"><i class="fa-solid fa-moon" aria-hidden="true"></i></button></div>
+      </div>
+    </nav>
+  </header>
+  <main id="main-content" tabindex="-1" class="page"><div class="wrap">
     <h1>Terms of Use</h1>
-    <p class="meta">Effective date: November 12, 2026 · Last updated: November 13, 2026</p>
+    <p class="meta">Effective date: November 12, 2026 · Last updated: November 18, 2026</p>
     <p class="lead">These terms govern your use of saadsheikh.bond (the “Site”). By accessing or using the Site you agree to them. If you do not agree, please do not use the Site.</p>
 
     <nav class="toc" aria-label="Contents">
@@ -76,13 +91,13 @@
     <p>I may block access or remove content if these rules are broken.</p>
 
     <h2 id="form">4. Contact form and messages</h2>
-    <p>Use the contact form for honest questions, feedback, collaboration or work opportunities. Do not send spam, advertising, abusive messages, malware or sensitive personal data. Sending a message does not create a professional, employment or contractual relationship, and I cannot promise a reply. How your message is handled is explained in the <a href="privacy-policy.html">Privacy Policy</a>.</p>
+    <p>Use the contact form for honest questions, feedback, collaboration or work opportunities. Do not send spam, advertising, abusive messages, malware or sensitive personal data. Sending a message does not create a professional, employment or contractual relationship, and I cannot promise a reply. How your message is handled is explained in the <a href="/privacy-policy">Privacy Policy</a>.</p>
 
     <h2 id="security">5. Security reports</h2>
-    <p>If you find a security issue, please report it privately using the details in <a href=".well-known/security.txt">security.txt</a> before sharing it publicly. Good-faith research that does not harm the Site or its visitors, or access data that is not yours, is welcome.</p>
+    <p>If you find a security issue, please report it privately using the details in <a href="security.txt">security.txt</a> before sharing it publicly. Good-faith research that does not harm the Site or its visitors, or access data that is not yours, is welcome.</p>
 
     <h2 id="links">6. Links to other sites</h2>
-    <p>The Site links to services such as GitHub, Telegram, WhatsApp and Facebook. I do not control them and am not responsible for their content, availability or practices.</p>
+    <p>The Site links to services such as GitHub, Telegram, Messenger, WhatsApp and Facebook. I do not control them and am not responsible for their content, availability or practices.</p>
 
     <h2 id="warranty">7. No warranties</h2>
     <p>The Site and its content are provided “as is” and “as available”. I try to keep them accurate and online, but I do not guarantee that the Site will be uninterrupted, error-free or free of harmful components, and information on it is general in nature.</p>
@@ -94,18 +109,22 @@
     <p>These terms are governed by the laws of Bangladesh. Where a mandatory consumer or data-protection law of your own country gives you rights that cannot be waived, those rights are not affected.</p>
 
     <h2 id="privacy">10. Privacy</h2>
-    <p>The <a href="privacy-policy.html">Privacy Policy</a> explains what information is handled and why. It forms part of these terms.</p>
+    <p>The <a href="/privacy-policy">Privacy Policy</a> explains what information is handled and why. It forms part of these terms.</p>
 
     <h2 id="changes">11. Changes</h2>
     <p>I may update these terms. The dates at the top show the latest version. Continuing to use the Site after a change means you accept the updated terms.</p>
 
     <h2 id="contact">12. Contact</h2>
-    <p>Questions about these terms: use the <a href="contact.html">Contact page</a>.</p>
+    <p>Questions about these terms: use the <a href="/contact">Contact page</a>.</p>
 
   </div></main>
-  <footer class="foot"><div class="wrap">
-    <p>© Saad Sheikh. All rights reserved.</p>
-    <p><a href="privacy-policy.html">Privacy Policy</a><a href="terms.html">Terms</a><a href="index.html#contact">Contact</a></p>
-  </div></footer>
+  <footer class="footer">
+    <div class="container footer__top">
+      <div><a class="brand" href="/"><span>SAAD</span><span>SHEIKH</span></a><p>Front-End Developer in Training</p></div>
+      <div class="footer__links"><a href="/about">About</a><a href="/#projects">Projects</a><a href="/contact">Contact</a><a href="/privacy-policy">Privacy Policy</a><a href="/terms">Terms</a></div>
+    </div>
+    <div class="container footer__bottom"><span>© <span id="currentYear">2026</span> Saad Sheikh. All Rights Reserved.</span><span>Built with HTML · CSS · JavaScript</span></div>
+  </footer>
+  <script src="js/pages.js?v=pages-v16"></script>
 </body>
 </html>

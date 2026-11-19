@@ -1,13 +1,13 @@
 {
-  "name": "Saad Sheikh | Digital Creator & Future Developer",
+  "name": "Saad Sheikh | Front-End Developer in Training",
   "short_name": "Saad Sheikh",
-  "description": "Official portfolio of Saad Sheikh from Faridpur, Bangladesh. Explore web development projects and learning progress.",
+  "description": "Portfolio of Saad Sheikh, front-end developer in training from Faridpur, Bangladesh.",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",
-  "background_color": "#080B14",
-  "theme_color": "#080B14",
-  "lang": "en-BD",
+  "background_color": "#080D18",
+  "theme_color": "#080D18",
+  "lang": "en",
   "icons": [
     {
       "src": "assets/icons/icon-192.png",

@@ -2,70 +2,48 @@
 
 const projects = [
   {
-    title: "Personal Portfolio Website",
-    type: "Demo Project",
-    category: ["web", "demo"],
-    description: "A modern responsive personal portfolio focused on clean UI, accessibility, performance and easy customization.",
+    title: "Sheikh Scientific Calculator",
+    type: "Web App",
+    category: ["web"],
+    description: "A private, keyboard-supported scientific calculator with local calculation history.",
     technologies: ["HTML", "CSS", "JavaScript"],
-    features: ["Responsive layout", "Dark/light theme", "Accessible navigation", "Project filtering"],
-    visual: "browser",
-    github: "#",
-    demo: "#"
-  },
-  {
-    title: "Modern Calculator",
-    type: "Demo Project",
-    category: ["javascript", "tools", "demo"],
-    description: "A focused calculator interface for practicing JavaScript events, arithmetic logic and polished UI states.",
-    technologies: ["HTML", "CSS", "JavaScript"],
-    features: ["Interactive keypad", "Keyboard-ready structure", "Clean display", "Responsive UI"],
+    features: ["Scientific calculations and keyboard support", "Private local calculation history"],
     visual: "calculator",
-    github: "#",
-    demo: "#"
+    github: "https://github.com/ahmadsaad8420-stack/-SHEIKH-SCIENTIFIC-",
+    demo: "https://ahmadsaad8420-stack.github.io/-SHEIKH-SCIENTIFIC-/"
   },
   {
-    title: "To-Do List App",
-    type: "Demo Project",
-    category: ["javascript", "tools", "demo"],
-    description: "A simple task-management concept for practicing DOM manipulation, state changes and user interaction.",
+    title: "Sheikh Weather",
+    type: "Web App",
+    category: ["web"],
+    description: "A live weather dashboard with forecasts, air quality, radar and an animated weather scene.",
     technologies: ["HTML", "CSS", "JavaScript"],
-    features: ["Add tasks", "Task states", "DOM interaction", "Minimal interface"],
-    visual: "list",
-    github: "#",
-    demo: "#"
-  },
-  {
-    title: "Expense Tracker",
-    type: "Demo Project",
-    category: ["web", "javascript", "tools", "demo"],
-    description: "A learning project concept for tracking income and expenses while practicing JavaScript data handling.",
-    technologies: ["HTML", "CSS", "JavaScript"],
-    features: ["Expense entries", "Category concept", "Summary visual", "Responsive dashboard"],
-    visual: "chart",
-    github: "#",
-    demo: "#"
-  },
-  {
-    title: "Weather App",
-    type: "Demo Project",
-    category: ["web", "javascript", "demo"],
-    description: "A weather-app concept designed to practice API integration patterns, loading states and information hierarchy.",
-    technologies: ["HTML", "CSS", "JavaScript", "API-ready"],
-    features: ["Weather card", "Location concept", "API-ready structure", "Loading-friendly UI"],
+    features: ["Live weather, hourly and 7-day forecasts", "Air quality, radar and weather alerts"],
     visual: "weather",
-    github: "#",
-    demo: "#"
+    github: "https://github.com/ahmadsaad8420-stack/-SHEIKH-WEATHER-",
+    demo: "https://ahmadsaad8420-stack.github.io/-SHEIKH-WEATHER-/"
   },
   {
-    title: "Simple JavaScript Game",
-    type: "Demo Project",
-    category: ["javascript", "web", "demo"],
-    description: "A lightweight game concept for practicing JavaScript events, timing, state and interactive feedback.",
+    title: "QR Studio",
+    type: "Web Tool",
+    category: ["web"],
+    description: "A simple tool for generating QR codes from text or URLs.",
     technologies: ["HTML", "CSS", "JavaScript"],
-    features: ["Game area", "Interactive state", "Score-ready structure", "Lightweight UI"],
-    visual: "game",
-    github: "#",
-    demo: "#"
+    features: ["Create QR codes from text or links", "Quick, straightforward workflow"],
+    visual: "qr",
+    github: "https://github.com/ahmadsaad8420-stack/QR-Studio",
+    demo: "https://ahmadsaad8420-stack.github.io/QR-Studio/"
+  },
+  {
+    title: "My Website",
+    type: "Portfolio",
+    category: ["web"],
+    description: "A personal website introducing Saad, his learning journey and work.",
+    technologies: ["HTML", "CSS", "JavaScript"],
+    features: ["Personal profile and learning highlights", "Responsive portfolio design"],
+    visual: "portfolio",
+    github: "https://github.com/ahmadsaad8420-stack/MY-WEBSITE-",
+    demo: "https://ahmadsaad8420-stack.github.io/MY-WEBSITE-/"
   }
 ];
 

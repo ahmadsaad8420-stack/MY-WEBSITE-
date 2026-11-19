@@ -9,21 +9,21 @@ const siteData = {
   email: ["ahmad.saad.8420", "gmail.com"].join("@"),
   phone: ["+880", "1622792592"].join(""),
   location: "Faridpur, Bangladesh",
-  facebook: "https://www.facebook.com/share/19E8xjMpwa/",
+  facebook: "https://www.facebook.com/share/1aUYR12oY3/",
   // Messages are received by Netlify Forms (form name: "contact").
-  // If this is set to "" the form opens the visitor's email app instead.
-  formEndpoint: "/",
+  // If this is set to "" the form opens the visitor's email app instead (useful for local testing).
+  formEndpoint: "/", // Netlify Forms; only works on the deployed site, not on a local server
   telegram: "https://t.me/saadahmad9k",
+  messenger: "https://m.me/s4admp4",
   github: "https://github.com/ahmadsaad8420-stack"
 };
 
-// ===============================
-// PROJECT DATA
-// Replace # with real URLs only when they actually exist.
-// ===============================
-// Add real contact details here when ready. Keep blank until verified; no contact links are fabricated.
+// Never report a local preview or a file:// page as a successful form submission.
+if (["localhost", "127.0.0.1", "[::1]"].includes(location.hostname) || location.protocol === "file:") {
+  siteData.formEndpoint = "";
+}
 
-
+// Project data lives in js/projects.js (replace "#" with real URLs only when they exist).
 
 const esc = t => String(t ?? "").replace(/[&<>"']/g, ch => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[ch]));
 const safeUrl = u => (/^https?:\/\//i.test(String(u)) ? esc(u) : "#");
@@ -31,7 +31,6 @@ const safeUrl = u => (/^https?:\/\//i.test(String(u)) ? esc(u) : "#");
 const qs = (selector, parent = document) => parent.querySelector(selector);
 const qsa = (selector, parent = document) => [...parent.querySelectorAll(selector)];
 
-const loader = qs("#loader");
 const siteHeader = qs("#siteHeader");
 const scrollProgress = qs("#scrollProgress");
 const backToTop = qs("#backToTop");
@@ -54,6 +53,7 @@ const contactForm = qs("#contactForm");
 
 let lastFocusedElement = null;
 let typingTimer = null;
+let themeWasChosen = false;
 
 // focus() silently does nothing while an element is still visibility:hidden (CSS transition),
 // so retry on the next frame. Keeps keyboard/screen-reader focus inside dialogs and menus.
@@ -67,23 +67,31 @@ function initTheme() {
   // Storage can be unavailable in strict/private browsing contexts; the site should still work.
   let savedTheme = null;
   try { savedTheme = localStorage.getItem("saad-theme"); } catch { /* use system preference */ }
-  const preferredTheme = window.matchMedia("(prefers-color-scheme: light)").matches ? "light" : "dark";
-  const theme = savedTheme === "light" || savedTheme === "dark" ? savedTheme : preferredTheme;
-  setTheme(theme);
+  themeWasChosen = savedTheme === "light" || savedTheme === "dark";
+  const theme = themeWasChosen ? savedTheme : (matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+  setTheme(theme, false); // only a visitor's own choice is saved
 }
 
-function setTheme(theme) {
+function setTheme(theme, persist = true) {
   document.documentElement.dataset.theme = theme;
   const isLight = theme === "light";
   themeToggle.innerHTML = isLight ? '<i class="fa-solid fa-moon" aria-hidden="true"></i>' : '<i class="fa-solid fa-sun" aria-hidden="true"></i>';
   themeToggle.setAttribute("aria-label", isLight ? "Switch to dark mode" : "Switch to light mode");
   themeToggle.title = isLight ? "Switch to dark mode" : "Switch to light mode";
-  qs("#themeColorMeta")?.setAttribute("content", isLight ? "#F7F7F5" : "#080B14");
-  try { localStorage.setItem("saad-theme", theme); } catch { /* theme still works for this visit */ }
+  qs("#themeColorMeta")?.setAttribute("content", isLight ? "#F7FAFF" : "#080D18");
+  if (persist) {
+    themeWasChosen = true;
+    try { localStorage.setItem("saad-theme", theme); } catch { /* theme still works for this visit */ }
+  }
 }
 
 themeToggle.addEventListener("click", () => {
   setTheme(document.documentElement.dataset.theme === "light" ? "dark" : "light");
+});
+
+const systemTheme = matchMedia("(prefers-color-scheme: dark)");
+systemTheme.addEventListener?.("change", event => {
+  if (!themeWasChosen) setTheme(event.matches ? "dark" : "light", false);
 });
 
 function updateScrollUI() {
@@ -151,7 +159,7 @@ function setupReveal() {
 
 function createMockVisual(type) {
   if (type === "calculator") {
-    return `<div class="project-visual" aria-hidden="true"><div class="mock-calculator"><div class="mock-display">12 + 08</div><div class="mock-buttons">${["7","8","9","÷","4","5","6","×","1","2","3","−","0",".","=","+"] .map(x => `<span>${x}</span>`).join("")}</div></div></div>`;
+    return `<div class="project-visual project-visual--image project-visual--calculator" aria-hidden="true"><img src="assets/images/projects/live-calculator.png" alt="" loading="lazy" decoding="async"></div>`;
   }
   if (type === "list") {
     return `<div class="project-visual" aria-hidden="true"><div class="mock-list"><span></span><span></span><span></span><span></span><span></span></div></div>`;
@@ -161,7 +169,13 @@ function createMockVisual(type) {
     return `<div class="project-visual" aria-hidden="true"><div class="mock-chart">${heights.map(h => `<span data-h="${h}"></span>`).join("")}</div></div>`;
   }
   if (type === "weather") {
-    return `<div class="project-visual" aria-hidden="true"><div class="mock-weather"><span>FARIDPUR · TODAY</span><strong>28°</strong><span>Clear learning skies</span></div></div>`;
+    return `<div class="project-visual project-visual--image" aria-hidden="true"><img src="assets/images/projects/weather-live-preview.png" alt="" loading="lazy" decoding="async"></div>`;
+  }
+  if (type === "qr") {
+    return `<div class="project-visual project-visual--image" aria-hidden="true"><img src="assets/images/projects/qr-studio.svg" alt="" loading="lazy" decoding="async"></div>`;
+  }
+  if (type === "portfolio") {
+    return `<div class="project-visual project-visual--image project-visual--portfolio" aria-hidden="true"><img src="assets/images/projects/live-portfolio.png" alt="" loading="lazy" decoding="async"></div>`;
   }
   if (type === "game") {
     return `<div class="project-visual" aria-hidden="true"><div class="mock-game"></div></div>`;
@@ -180,7 +194,7 @@ function projectCard(project, index) {
   return `<article class="project-card reveal" data-categories="${categories}" data-index="${index}">
     ${createMockVisual(project.visual)}
     <div class="project-body">
-      <div class="project-top"><span class="project-badge">DEMO PROJECT</span><span class="project-category">${esc(project.category[0])}</span></div>
+      <div class="project-top"><span class="project-badge">${esc(String(project.type || "Demo Project").toUpperCase())}</span><span class="project-category">${esc(project.category[0])}</span></div>
       <h3>${esc(project.title)}</h3>
       <p>${esc(project.description)}</p>
       <div class="tech-list">${tech}</div>
@@ -194,6 +208,12 @@ function projectCard(project, index) {
 }
 
 function renderProjects(filter = "all") {
+  const filterBar = qs(".filter-bar");
+  if (!projects.length) {
+    if (filterBar) filterBar.hidden = true;
+    return;
+  }
+  if (filterBar) filterBar.hidden = false;
   const filtered = projects.filter(project => filter === "all" || project.category.includes(filter));
   projectGrid.innerHTML = filtered.map((project) => projectCard(project, projects.indexOf(project))).join("");
   applyChartHeights(projectGrid);
@@ -217,7 +237,7 @@ function showTemporaryStatus(message) {
 }
 
 function setBackgroundInert(on) {
-  qsa("#main-content, .site-header, .footer, .floating-contact, .back-to-top").forEach(el => { if (on) el.setAttribute("inert", ""); else el.removeAttribute("inert"); });
+  qsa("#main-content, .site-header, .footer, .back-to-top").forEach(el => { if (on) el.setAttribute("inert", ""); else el.removeAttribute("inert"); });
 }
 
 function openProjectModal(index) {
@@ -273,8 +293,9 @@ document.addEventListener("keydown", event => {
 });
 
 qsa(".filter-button").forEach(button => button.addEventListener("click", () => {
-  qsa(".filter-button").forEach(item => item.classList.remove("active"));
+  qsa(".filter-button").forEach(item => { item.classList.remove("active"); item.setAttribute("aria-pressed", "false"); });
   button.classList.add("active");
+  button.setAttribute("aria-pressed", "true");
   renderProjects(button.dataset.filter);
 }));
 
@@ -305,7 +326,42 @@ function showCopyFeedback() {
   setTimeout(() => { copyEmailButton.innerHTML = original; copyEmailButton.setAttribute("aria-label", "Copy email address"); }, 1600);
 }
 
+
 copyEmailButton.addEventListener("click", copyEmail);
+
+// Copy phone number from the contact card, with a legacy-browser fallback.
+const copyPhoneButton = qs("#copyPhone");
+async function copyPhoneNumber() {
+  const phone = siteData.phone;
+  try {
+    if (navigator.clipboard?.writeText) await navigator.clipboard.writeText(phone);
+    else throw new Error("Clipboard API unavailable");
+    const original = copyPhoneButton.innerHTML;
+    copyPhoneButton.innerHTML = '<i class="fa-solid fa-check" aria-hidden="true"></i>';
+    copyPhoneButton.setAttribute("aria-label", "Phone number copied");
+    showTemporaryStatus("Phone number copied!");
+    setTimeout(() => {
+      copyPhoneButton.innerHTML = original;
+      copyPhoneButton.setAttribute("aria-label", "Copy phone number");
+    }, 1600);
+  } catch {
+    const helper = document.createElement("textarea");
+    helper.value = phone;
+    helper.style.position = "fixed";
+    helper.style.opacity = "0";
+    document.body.appendChild(helper);
+    helper.select();
+    try {
+      document.execCommand("copy");
+      showTemporaryStatus("Phone number copied!");
+    } catch {
+      showTemporaryStatus(`Copy failed. Phone: ${phone}`);
+    }
+    helper.remove();
+  }
+}
+if (copyPhoneButton) copyPhoneButton.addEventListener("click", copyPhoneNumber);
+
 
 function validateField(input, errorElement, message) {
   const value = input.value.trim();
@@ -347,7 +403,7 @@ contactForm.addEventListener("submit", event => {
       // Too fast to be a person: ask to retry instead of silently dropping a real message.
       if (Date.now() - formOpenedAt < 3000) { setFormStatus(formStatus, "Please wait a moment and press Send again.", "error"); return; }
       // Simple client-side cooldown against double/rapid submits.
-      if (Date.now() - lastSubmitAt < 30000) { setFormStatus(formStatus, "Please wait a few seconds before sending another message.", "error"); return; }
+      if (Date.now() - lastSubmitAt < 30000) { const wait = Math.ceil((30000 - (Date.now() - lastSubmitAt)) / 1000); setFormStatus(formStatus, `Please wait ${wait} more second${wait === 1 ? "" : "s"} before sending another message.`, "error"); return; }
       lastSubmitAt = Date.now();
       setFormStatus(formStatus, "Sending your message...", "");
       submitButton.disabled = true;
@@ -387,7 +443,7 @@ qsa("#contactForm input, #contactForm textarea").forEach(input => {
 });
 
 function setupTyping() {
-  const phrases = ["Creative Learner", "Web Enthusiast", "Future Developer", "Digital Creator"];
+  const phrases = ["Front-End Developer in Training", "Electrical Engineering Student", "HTML, CSS & JavaScript"];
   let phraseIndex = 0;
   let charIndex = 0;
   let deleting = false;
@@ -415,55 +471,122 @@ function setupTyping() {
   tick();
 }
 
-function setupMagneticButtons() {
-  const supportsHover = window.matchMedia("(hover: hover) and (pointer: fine)").matches;
-  const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-  if (!supportsHover || reduced) return;
-  qsa(".magnetic").forEach(button => {
-    button.addEventListener("pointermove", event => {
-      const rect = button.getBoundingClientRect();
-      const x = ((event.clientX - rect.left) / rect.width - .5) * 8;
-      const y = ((event.clientY - rect.top) / rect.height - .5) * 8;
-      button.style.transform = `translate(${x}px, ${y}px)`;
-    });
-    button.addEventListener("pointerleave", () => { button.style.transform = ""; });
-  });
-}
-
 function setCurrentYear() {
   qs("#currentYear").textContent = new Date().getFullYear();
+}
+
+function setupDepthEffects() {
+  const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const finePointer = window.matchMedia("(hover: hover) and (pointer: fine)").matches;
+  if (reduceMotion || !finePointer) return;
+
+  const addTilt = (element, max = 7) => {
+    if (!element || element.dataset.depthReady === "true") return;
+    element.dataset.depthReady = "true";
+    element.addEventListener("pointermove", event => {
+      const rect = element.getBoundingClientRect();
+      const x = (event.clientX - rect.left) / rect.width;
+      const y = (event.clientY - rect.top) / rect.height;
+      const tiltY = (x - .5) * max * 2;
+      const tiltX = (.5 - y) * max * 2;
+      element.style.setProperty("--tilt-x", `${tiltX.toFixed(2)}deg`);
+      element.style.setProperty("--tilt-y", `${tiltY.toFixed(2)}deg`);
+    }, { passive: true });
+    element.addEventListener("pointerleave", () => {
+      element.style.setProperty("--tilt-x", "0deg");
+      element.style.setProperty("--tilt-y", "0deg");
+    }, { passive: true });
+  };
+
+  addTilt(qs(".hero-photo-3d"), 4.5);
+
+  qsa(".info-card, .service-card, .skill-card, .timeline-card, .goal-list article, .contact-card").forEach(card => addTilt(card, 3));
+  // Delegation also covers project cards rendered after initial page parsing.
+  document.addEventListener("pointerover", event => {
+    const card = event.target.closest?.(".project-card");
+    if (card) addTilt(card, 6);
+  }, { passive: true });
+  qsa(".project-card").forEach(card => addTilt(card, 6));
+}
+
+function setupDeviceMotion() {
+  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+  if (window.matchMedia("(hover: hover) and (pointer: fine)").matches) return;
+  const MotionEvent = window.DeviceOrientationEvent;
+  const portrait = qs("#heroPhotoBtn");
+  if (!MotionEvent || !portrait) return;
+
+  const start = () => {
+  let betaOrigin = null;
+  let gammaOrigin = null;
+  const handleOrientation = event => {
+    if (event.beta === null || event.gamma === null) return;
+    if (betaOrigin === null || gammaOrigin === null) {
+      betaOrigin = event.beta;
+      gammaOrigin = event.gamma;
+    }
+    portrait.classList.add("motion-sensor-active");
+    document.documentElement.classList.add("motion-sensor-active");
+    const tiltX = Math.max(-8, Math.min(8, (event.beta - betaOrigin) * .16));
+    const tiltY = Math.max(-8, Math.min(8, (event.gamma - gammaOrigin) * .18));
+    portrait.style.setProperty("--tilt-x", `${tiltX.toFixed(2)}deg`);
+    portrait.style.setProperty("--tilt-y", `${tiltY.toFixed(2)}deg`);
+    qsa(".skill-card, .info-card, .service-card, .timeline-card, .goal-list article, .contact-card").forEach(card => {
+      card.style.setProperty("--tilt-x", `${(tiltX * .55).toFixed(2)}deg`);
+      card.style.setProperty("--tilt-y", `${(tiltY * .55).toFixed(2)}deg`);
+    });
+    const sphere = qs("#skillsOrbit");
+    if (sphere) {
+      sphere.style.setProperty("--sphere-tilt-x", `${(tiltX * 1.6).toFixed(2)}deg`);
+      sphere.style.setProperty("--sphere-tilt-y", `${(tiltY * 1.6).toFixed(2)}deg`);
+    }
+  };
+
+  window.addEventListener("deviceorientation", handleOrientation, { passive: true });
+  portrait.setAttribute("aria-label", "Motion-based 3D effect enabled");
+  };
+
+  if (typeof MotionEvent.requestPermission === "function") {
+  portrait.addEventListener("click", async () => {
+    try {
+      if (await MotionEvent.requestPermission() === "granted") start();
+    } catch {
+      portrait.setAttribute("aria-label", "Motion permission was not granted");
+    }
+  }, { once: true });
+  } else {
+  start();
+  }
 }
 
 function setupImageFallbacks() {
   qsa("img").forEach(img => {
     img.addEventListener("error", () => {
-      img.alt = `${siteData.name} profile image unavailable`;
-    });
+      // Keep each image's own description; only add a note for images that have one.
+      if (img.alt && !img.alt.endsWith("(image unavailable)")) img.alt = `${img.alt} (image unavailable)`;
+    }, { once: true });
   });
 }
 
-// Hide the loader on load, but never let it block the page for more than 1.8s
-// (slow font/CDN, blocked requests, etc.).
-const hideLoader = () => loader.classList.add("is-hidden");
-window.addEventListener("load", () => setTimeout(hideLoader, 120));
-setTimeout(hideLoader, 1800);
 
-// Contact details are written by JS (not hard-coded in the HTML) so simple
-// scrapers that only read raw HTML do not harvest the email/phone.
+// Email, phone and messaging links are written by JS in the main contact section. This only keeps them out of the
+// raw HTML; it is NOT real spam protection (they are still readable in this file and in the CV).
 function fillContactDetails() {
   const phoneDigits = siteData.phone.replace(/\D/g, "");
   const targets = {
     email: { href: `mailto:${siteData.email}`, text: siteData.email },
-    phone: { href: `tel:${siteData.phone}`, text: siteData.phone },
-    whatsapp: { href: `https://wa.me/${phoneDigits}`, text: siteData.phone },
+    phone: { href: `tel:${siteData.phone}`, text: "+880 1622-792592" },
+    whatsapp: { href: `https://wa.me/${phoneDigits}`, text: "+880 1622-792592" },
     telegram: { href: siteData.telegram, text: "@" + siteData.telegram.split("/").pop() },
     facebook: { href: siteData.facebook, text: "" },
+    messenger: { href: siteData.messenger, text: "Open Messenger" },
     github: { href: siteData.github, text: "" }
   };
   qsa("[data-contact]").forEach(el => {
     const t = targets[el.dataset.contact];
     if (!t) return;
     el.setAttribute("href", t.href);
+    if (/^https:/i.test(t.href)) { el.setAttribute("target", "_blank"); el.setAttribute("rel", "noopener noreferrer"); }
     if (el.hasAttribute("data-fill-text")) el.textContent = t.text;
   });
   qsa("[data-contact-text]").forEach(el => {
@@ -478,10 +601,11 @@ updateScrollUI();
 setupActiveNavigation();
 setupReveal();
 setupTyping();
-setupMagneticButtons();
 setCurrentYear();
 setupImageFallbacks();
 renderProjects();
+setupDepthEffects();
+setupDeviceMotion();
 
 // ===== GitHub stats (public API, no keys) =====
 function setupGithub() {
@@ -530,7 +654,7 @@ function setupCommandMenu() {
   if (!menu) return;
   const go = id => () => qs(id)?.scrollIntoView({ behavior: "smooth" });
   const commands = [
-    ["Go to Home", go("#home")], ["Go to About", go("#about")], ["Go to Skills", go("#skills")], ["Go to Projects", go("#projects")], ["Go to FAQ", go("#faq")], ["Go to Contact", go("#contact")],
+    ["Go to Home", go("#home")], ["Go to About", go("#about")], ["Go to Skills", go("#skills")], ["Go to Journey", go("#journey")], ["Go to Goals", go("#goals")], ["Go to Projects", go("#projects")], ["Go to Contact", go("#contact")],
     ["Toggle dark / light theme", () => setTheme(document.documentElement.dataset.theme === "light" ? "dark" : "light")],
     ["Download CV", () => { window.location.href = "assets/cv/Saad-Sheikh-CV.pdf"; }],
     ["Open GitHub", () => window.open(siteData.github, "_blank", "noopener")],
@@ -542,7 +666,7 @@ function setupCommandMenu() {
     list.innerHTML = shown.map((c, i) => `<li role="option" id="cmd-${i}" aria-selected="${i === active}" class="${i === active ? "active" : ""}" data-i="${i}">${esc(c[0])}</li>`).join("") || '<li class="empty">No results</li>';
     input.setAttribute("aria-activedescendant", shown.length ? `cmd-${active}` : "");
   };
-  const inertTargets = "#main-content, .site-header, .footer, .floating-contact, .back-to-top";
+  const inertTargets = "#main-content, .site-header, .footer, .back-to-top";
   const setInert = on => qsa(inertTargets).forEach(el => on ? el.setAttribute("inert", "") : el.removeAttribute("inert"));
   const open = () => { lastFocus = document.activeElement; setInert(true); input.setAttribute("aria-expanded", "true"); menu.classList.add("open"); menu.setAttribute("aria-hidden", "false"); input.value = ""; shown = commands; active = 0; render(); focusSoon(input); };
   const close = () => { setInert(false); input.setAttribute("aria-expanded", "false"); menu.classList.remove("open"); menu.setAttribute("aria-hidden", "true"); lastFocus?.focus?.(); };
@@ -566,7 +690,163 @@ setupGithub();
 setupOptionalSections();
 setupCommandMenu();
 
-// ===== Offline support (only on https/localhost, never from file://) =====
+function setup3DInteractions() {
+  const loader = qs("#siteLoader");
+  const hideLoader = () => { if(loader) loader.classList.add("is-hidden"); };
+  if(document.readyState === "complete") setTimeout(hideLoader, 450);
+  else window.addEventListener("load",()=>setTimeout(hideLoader,450),{once:true});
+  setTimeout(hideLoader, 3500);
+
+  const cursor = qs("#cursorGlow");
+  if(cursor && matchMedia("(hover:hover) and (pointer:fine)").matches && !matchMedia("(prefers-reduced-motion: reduce)").matches){
+    let x=0,y=0,tx=0,ty=0,frame=0;
+    const move=e=>{tx=e.clientX;ty=e.clientY;if(!frame)frame=requestAnimationFrame(()=>{x+=(tx-x)*.35;y+=(ty-y)*.35;cursor.style.left=`${x}px`;cursor.style.top=`${y}px`;frame=0;});};
+    window.addEventListener("pointermove",move,{passive:true});
+  }
+  const canTilt = matchMedia("(hover:hover) and (pointer:fine)").matches && !matchMedia("(prefers-reduced-motion: reduce)").matches;
+  if (canTilt) {
+    qsa("[data-tilt-card]").forEach(card => {
+      card.addEventListener("pointermove", event => {
+        const rect = card.getBoundingClientRect();
+        const x = (event.clientX - rect.left) / rect.width - .5;
+        const y = (event.clientY - rect.top) / rect.height - .5;
+        card.style.transform = `perspective(1000px) rotateX(${(-y * 5).toFixed(2)}deg) rotateY(${(x * 6).toFixed(2)}deg) translateY(-3px)`;
+      }, { passive: true });
+      card.addEventListener("pointerleave", () => { card.style.transform = ""; }, { passive: true });
+    });
+  }
+  const sphere=qs("#skillsOrbit");
+  if(sphere && matchMedia("(hover:hover) and (pointer:fine)").matches && !matchMedia("(prefers-reduced-motion: reduce)").matches){
+    sphere.addEventListener("pointermove",e=>{const r=sphere.getBoundingClientRect(),x=(e.clientX-r.left)/r.width-.5,y=(e.clientY-r.top)/r.height-.5;sphere.style.animationPlayState="paused";sphere.style.transform=`rotateX(${(-y*25).toFixed(1)}deg) rotateY(${(x*32).toFixed(1)}deg) scale(1.025)`;},{passive:true});
+    sphere.addEventListener("pointerleave",()=>{sphere.style.animationPlayState="running";sphere.style.transform="";},{passive:true});
+  }
+}
+
+function setupHeroScene() {
+  const canvas = qs("#heroScene");
+  const section = qs("#home");
+  const visual = qs(".hero__visual");
+  const ctx = canvas?.getContext("2d");
+  if (!canvas || !section || !visual || !ctx) return;
+
+  const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const mobile = window.matchMedia("(max-width: 700px)").matches;
+  const pointCount = mobile ? 42 : 68;
+  const points = Array.from({ length: pointCount }, (_, index) => {
+    const y = 1 - (index / (pointCount - 1)) * 2;
+    const radius = Math.sqrt(1 - y * y);
+    const angle = Math.PI * (3 - Math.sqrt(5)) * index;
+    return { x: Math.cos(angle) * radius, y, z: Math.sin(angle) * radius };
+  });
+  const edges = [];
+  points.forEach((point, index) => {
+    for (let other = index + 1; other < points.length; other++) {
+      const next = points[other];
+      const distance = Math.hypot(point.x - next.x, point.y - next.y, point.z - next.z);
+      if (distance < .62) edges.push([index, other]);
+    }
+  });
+
+  let width = 0, height = 0, dpr = 1, frame = 0, inView = true;
+  const projected = new Array(points.length);
+
+  function draw(time) {
+    frame = 0;
+    if (!inView || document.hidden) return;
+
+    const sectionRect = section.getBoundingClientRect();
+    const visualRect = visual.getBoundingClientRect();
+    const centerX = visualRect.left - sectionRect.left + visualRect.width / 2;
+    const centerY = visualRect.top - sectionRect.top + visualRect.height / 2;
+    const globeRadius = Math.max(80, Math.min(visualRect.width * .48, visualRect.height * .45, width * .3, height * .38));
+    const angle = reducedMotion ? 0 : time * .00012;
+    const cosY = Math.cos(angle), sinY = Math.sin(angle);
+    const tilt = -.18, cosX = Math.cos(tilt), sinX = Math.sin(tilt);
+
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    ctx.clearRect(0, 0, width, height);
+
+    const glow = ctx.createRadialGradient(centerX, centerY, 0, centerX, centerY, globeRadius * 1.18);
+    glow.addColorStop(0, "rgba(57,139,255,.075)");
+    glow.addColorStop(1, "rgba(57,139,255,0)");
+    ctx.fillStyle = glow;
+    ctx.beginPath();
+    ctx.arc(centerX, centerY, globeRadius * 1.18, 0, Math.PI * 2);
+    ctx.fill();
+
+    points.forEach((point, index) => {
+      const x = point.x * cosY + point.z * sinY;
+      const z = -point.x * sinY + point.z * cosY;
+      const y = point.y * cosX - z * sinX;
+      const depth = point.y * sinX + z * cosX;
+      const scale = 1 + depth * .13;
+      projected[index] = {
+        x: centerX + x * globeRadius * scale,
+        y: centerY + y * globeRadius * scale,
+        z: depth
+      };
+    });
+
+    ctx.lineWidth = 1;
+    edges.forEach(([from, to]) => {
+      const a = projected[from], b = projected[to];
+      const alpha = .035 + ((a.z + b.z + 2) / 4) * .13;
+      ctx.strokeStyle = `rgba(93,169,255,${alpha})`;
+      ctx.beginPath();
+      ctx.moveTo(a.x, a.y);
+      ctx.lineTo(b.x, b.y);
+      ctx.stroke();
+    });
+
+    projected.forEach(point => {
+      const alpha = .16 + ((point.z + 1) / 2) * .52;
+      ctx.fillStyle = `rgba(150,207,255,${alpha})`;
+      ctx.beginPath();
+      ctx.arc(point.x, point.y, 1 + ((point.z + 1) / 2) * 1.2, 0, Math.PI * 2);
+      ctx.fill();
+    });
+
+    ctx.strokeStyle = "rgba(93,169,255,.13)";
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    ctx.ellipse(centerX, centerY, globeRadius * 1.12, globeRadius * .34, -.22, 0, Math.PI * 2);
+    ctx.stroke();
+
+    if (!reducedMotion) frame = requestAnimationFrame(draw);
+  }
+
+  function resize() {
+    const rect = section.getBoundingClientRect();
+    dpr = Math.min(window.devicePixelRatio || 1, 1.5);
+    width = rect.width;
+    height = rect.height;
+    canvas.width = Math.round(width * dpr);
+    canvas.height = Math.round(height * dpr);
+    if (reducedMotion) draw(0);
+    else if (inView && !frame) frame = requestAnimationFrame(draw);
+  }
+
+  const observer = new IntersectionObserver(entries => {
+    inView = entries[0].isIntersecting;
+    if (!inView && frame) { cancelAnimationFrame(frame); frame = 0; }
+    else if (inView) resize();
+  });
+  observer.observe(section);
+  if ("ResizeObserver" in window) new ResizeObserver(resize).observe(section);
+  else window.addEventListener("resize", resize, { passive: true });
+  document.addEventListener("visibilitychange", () => {
+    if (document.hidden && frame) { cancelAnimationFrame(frame); frame = 0; }
+    else if (!document.hidden && inView) resize();
+  });
+  resize();
+}
+
+
+// The portrait and cards use lightweight pointer motion and optional device-orientation input.
+
+setup3DInteractions();
+setupHeroScene();
+
 if ("serviceWorker" in navigator && (location.protocol === "https:" || location.hostname === "localhost")) {
   window.addEventListener("load", () => navigator.serviceWorker.register("sw.js").catch(() => { /* optional feature */ }));
 }

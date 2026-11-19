@@ -1,4 +1,12 @@
-# Short, shareable URLs
-/privacy   /privacy-policy                 301
-/cv        /assets/cv/Saad-Sheikh-CV.pdf   302
-/resume    /assets/cv/Saad-Sheikh-CV.pdf   302
+/.well-known/security.txt  /security.txt  200!
+
+# Old .html URLs -> clean URLs (same URLs as canonical tags and the sitemap)
+/index.html            /               301!
+/about.html            /about          301!
+/contact.html          /contact        301!
+/privacy-policy.html   /privacy-policy 301!
+/terms.html            /terms          301!
+/thanks.html           /thanks         301!
+
+# Force the default Netlify hostname to the custom primary domain
+https://saadsheikh.netlify.app/* https://saadsheikh.bond/:splat 301!

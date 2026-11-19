@@ -2,36 +2,55 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; font-src 'self'; img-src 'self' data:; connect-src 'self' https://api.github.com; manifest-src 'self'; worker-src 'self'; base-uri 'self'; form-action 'self'; object-src 'none'; frame-src 'none'">
-  <script src="js/boot.js?v=7"></script>
+  <script src="js/boot.js?v=boot-v16"></script>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Message sent | Saad Sheikh</title>
   <meta name="description" content="Your message has been sent.">
   <meta name="robots" content="noindex">
   <meta name="author" content="Saad Sheikh">
   <meta name="color-scheme" content="dark light">
-  <meta name="theme-color" content="#080B14" media="(prefers-color-scheme: dark)">
-  <meta name="theme-color" content="#F7F7F5" media="(prefers-color-scheme: light)">
-                        <link rel="icon" href="favicon-32.png?v=7" sizes="32x32" type="image/png">
+  <meta name="theme-color" content="#080D18" id="themeColorMeta">
+  <link rel="icon" href="favicon-32.png?v=10" sizes="32x32" type="image/png">
   <link rel="icon" href="favicon.svg" type="image/svg+xml">
   <link rel="apple-touch-icon" href="assets/icons/apple-touch-icon.png">
   <link rel="manifest" href="manifest.json">
-  <link rel="stylesheet" href="css/pages.css?v=7">
+  <link rel="stylesheet" href="css/icons.css?v=icons-v18">
+  <link rel="stylesheet" href="css/style.css?v=portfolio-pro-v18">
+  <link rel="stylesheet" href="css/pages.css?v=pages-v16">
 </head>
 <body>
   <a class="skip-link" href="#main-content">Skip to content</a>
-  <header class="top"><div class="wrap">
-    <a class="brand" href="index.html" aria-label="Saad Sheikh home"><span>SAAD</span><span>SHEIKH</span></a>
-    <nav class="menu" aria-label="Primary navigation"><a href="index.html">Home</a><a href="about.html">About</a><a href="index.html#projects">Projects</a><a href="contact.html">Contact</a><a href="privacy-policy.html">Privacy Policy</a><a href="terms.html">Terms</a></nav>
-  </div></header>
-  <main id="main-content"><div class="wrap">
+  <header class="site-header scrolled" id="siteHeader">
+    <nav class="navbar container" aria-label="Primary navigation">
+      <a class="brand" href="/" aria-label="Saad Sheikh home"><span>SAAD</span><span>SHEIKH</span></a>
+      <button class="menu-toggle" id="menuToggle" type="button" aria-expanded="false" aria-controls="primaryMenu" aria-label="Open navigation menu"><span></span><span></span><span></span></button>
+      <div class="nav-shell" id="primaryMenu">
+        <ul class="nav-links">
+          <li><a class="nav-link" href="/#home">Home</a></li>
+          <li><a class="nav-link" href="/about">About</a></li>
+          <li><a class="nav-link" href="/#what-i-do">What I Do</a></li>
+          <li><a class="nav-link" href="/#skills">Skills</a></li>
+          <li><a class="nav-link" href="/#journey">Journey</a></li>
+          <li><a class="nav-link" href="/#projects">Projects</a></li>
+          <li><a class="nav-link" href="/#goals">Goals</a></li>
+          <li><a class="nav-link" href="/contact">Contact</a></li>
+        </ul>
+        <div class="nav-actions"><button class="icon-button" id="themeToggle" type="button" aria-label="Switch to dark mode" title="Switch theme"><i class="fa-solid fa-moon" aria-hidden="true"></i></button></div>
+      </div>
+    </nav>
+  </header>
+  <main id="main-content" tabindex="-1" class="page"><div class="wrap">
     <h1>Thank you!</h1>
     <p class="lead">Your message has been sent. I will reply as soon as I can.</p>
-    <div class="links"><a class="btn btn--primary" href="index.html">Back to Home</a></div>
+    <div class="links"><a class="button button--primary" href="/">Back to Home</a></div>
   </div></main>
-  <footer class="foot"><div class="wrap">
-    <p>© Saad Sheikh. All rights reserved.</p>
-    <p><a href="privacy-policy.html">Privacy Policy</a><a href="terms.html">Terms</a><a href="index.html#contact">Contact</a></p>
-  </div></footer>
+  <footer class="footer">
+    <div class="container footer__top">
+      <div><a class="brand" href="/"><span>SAAD</span><span>SHEIKH</span></a><p>Front-End Developer in Training</p></div>
+      <div class="footer__links"><a href="/about">About</a><a href="/#projects">Projects</a><a href="/contact">Contact</a><a href="/privacy-policy">Privacy Policy</a><a href="/terms">Terms</a></div>
+    </div>
+    <div class="container footer__bottom"><span>© <span id="currentYear">2026</span> Saad Sheikh. All Rights Reserved.</span><span>Built with HTML · CSS · JavaScript</span></div>
+  </footer>
+  <script src="js/pages.js?v=pages-v16"></script>
 </body>
 </html>
