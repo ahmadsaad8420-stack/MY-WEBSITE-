@@ -14,7 +14,7 @@
       toggle.setAttribute("aria-label", label);
       toggle.title = label;
     }
-    qs("#themeColorMeta")?.setAttribute("content", light ? "#F7FAFF" : "#080D18");
+    qs("#themeColorMeta")?.setAttribute("content", light ? "#F7FAFF" : "#141414");
     if (persist) {
       themeWasChosen = true;
       try { localStorage.setItem("saad-theme", theme); } catch { /* still works for this visit */ }
@@ -67,7 +67,4 @@
   if (year) year.textContent = new Date().getFullYear();
 
   // Install the same PWA shell even when a visitor lands on an inner page first.
-  if ("serviceWorker" in navigator && (location.protocol === "https:" || location.hostname === "localhost")) {
-    window.addEventListener("load", () => navigator.serviceWorker.register("/sw.js").catch(() => {}), { once: true });
-  }
 })();

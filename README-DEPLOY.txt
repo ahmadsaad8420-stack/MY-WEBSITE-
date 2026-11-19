@@ -13,6 +13,11 @@ DEPLOY
    _redirects file sends the default saadsheikh.netlify.app host to this domain.
 4. After the first deploy, open the live site and test every page and form.
 
+LOCAL PREVIEW
+-------------
+Sub-pages use root-relative links (/about, /css/...). Preview with a local server, for example
+`npx serve .` or `python3 -m http.server`, rather than double-clicking the .html files.
+
 CONTACT FORM
 ------------
 The form uses Netlify Forms. Enable form detection in the Netlify site settings,
@@ -30,6 +35,9 @@ do not configure another provider.
 
 CUSTOM DOMAIN
 -------------
+The first rules in _redirects send saadsheikh.netlify.app and www.saadsheikh.bond to
+https://saadsheikh.bond/ (they only work once saadsheikh.bond is added as the primary
+domain in Netlify > Domain management and DNS is verified).
 The canonical URLs, sitemap, Open Graph metadata and redirects use
 https://saadsheikh.bond/. If you use another domain, update those values in the
 HTML files, sitemap.xml, robots.txt, security.txt and _redirects before launch.

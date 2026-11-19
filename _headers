@@ -4,10 +4,12 @@
   X-Frame-Options: DENY
   Referrer-Policy: strict-origin-when-cross-origin
   Permissions-Policy: camera=(), microphone=(), geolocation=(), payment=(), usb=(), serial=(), accelerometer=(self), gyroscope=(self), magnetometer=(), midi=(), display-capture=(), browsing-topics=()
-  Strict-Transport-Security: max-age=31536000; includeSubDomains
+  Strict-Transport-Security: max-age=63072000; includeSubDomains; preload
   Cross-Origin-Opener-Policy: same-origin
   X-Permitted-Cross-Domain-Policies: none
   Origin-Agent-Cluster: ?1
+  Cross-Origin-Resource-Policy: same-origin
+  X-XSS-Protection: 0
 
 /
   Cache-Control: no-cache
@@ -30,14 +32,36 @@
   Content-Type: text/plain; charset=utf-8
   Cache-Control: public, max-age=3600
 
+# CSS/JS file names are not content-hashed, so always revalidate (cheap 304) instead of "immutable".
 /css/*
-  Cache-Control: public, max-age=31536000, immutable
+  Cache-Control: public, max-age=0, must-revalidate
 
 /js/*
+  Cache-Control: public, max-age=0, must-revalidate
+
+/assets/images/*
+  Cache-Control: public, max-age=604800, stale-while-revalidate=86400
+
+/assets/fonts/*
   Cache-Control: public, max-age=31536000, immutable
 
-/assets/*
+/assets/icons/*
   Cache-Control: public, max-age=604800, stale-while-revalidate=86400
+
+# Social crawlers and link previews must be able to load the share image.
+/assets/images/og-image.jpg
+  Cross-Origin-Resource-Policy: cross-origin
+
+# A replaced CV must show up immediately.
+/assets/cv/*
+  Cache-Control: public, max-age=0, must-revalidate
 
 /.well-known/security.txt
   Content-Type: text/plain; charset=utf-8
+
+/security.txt
+  Content-Type: text/plain; charset=utf-8
+
+# Form confirmation page must never appear in search results
+/thanks
+  X-Robots-Tag: noindex

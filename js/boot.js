@@ -9,3 +9,7 @@ try {
 } catch {
   document.documentElement.dataset.theme = matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
 }
+// Safety net: if anything in script.js fails, never leave the full-screen loader covering the page.
+document.addEventListener("DOMContentLoaded", () => {
+  setTimeout(() => { document.body.classList.remove("is-loading"); document.getElementById("siteLoader")?.classList.add("is-hidden"); }, 4000);
+});

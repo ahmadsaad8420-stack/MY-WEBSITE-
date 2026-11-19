@@ -60,7 +60,8 @@ tr:last-child td { border-bottom: 0; }
 @media (prefers-reduced-motion: reduce) { .page .callout, .page .toc, .page .table-wrap { transition: none; } }
 
 /* Consistent futuristic depth on every secondary page. */
-.page { position: relative; isolation: isolate; perspective: 1200px; }
+/* overflow-x: clip stops the decorative rings below from widening the page on phones (they stick out past the right edge). */
+.page { position: relative; isolation: isolate; perspective: 1200px; overflow-x: clip; }
 .page::before, .page::after {
   content: ""; position: absolute; z-index: -1; width: min(42vw,420px); aspect-ratio: 1;
   border: 1px solid rgba(var(--accent-rgb),.13); border-radius: 50%;

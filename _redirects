@@ -1,4 +1,16 @@
+# Default Netlify hostname and www -> primary custom domain (kept first so they win over every other rule)
+https://saadsheikh.netlify.app/*  https://saadsheikh.bond/:splat  301!
+http://saadsheikh.netlify.app/*   https://saadsheikh.bond/:splat  301!
+https://www.saadsheikh.bond/*     https://saadsheikh.bond/:splat  301!
+http://www.saadsheikh.bond/*      https://saadsheikh.bond/:splat  301!
+
 /.well-known/security.txt  /security.txt  200!
+
+# Deployment notes and config are not part of the public site
+/README-DEPLOY.txt /404.html 404!
+/netlify.toml      /404.html 404!
+/_headers          /404.html 404!
+/_redirects        /404.html 404!
 
 # Old .html URLs -> clean URLs (same URLs as canonical tags and the sitemap)
 /index.html            /               301!
@@ -7,6 +19,3 @@
 /privacy-policy.html   /privacy-policy 301!
 /terms.html            /terms          301!
 /thanks.html           /thanks         301!
-
-# Force the default Netlify hostname to the custom primary domain
-https://saadsheikh.netlify.app/* https://saadsheikh.bond/:splat 301!

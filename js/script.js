@@ -78,7 +78,7 @@ function setTheme(theme, persist = true) {
   themeToggle.innerHTML = isLight ? '<i class="fa-solid fa-moon" aria-hidden="true"></i>' : '<i class="fa-solid fa-sun" aria-hidden="true"></i>';
   themeToggle.setAttribute("aria-label", isLight ? "Switch to dark mode" : "Switch to light mode");
   themeToggle.title = isLight ? "Switch to dark mode" : "Switch to light mode";
-  qs("#themeColorMeta")?.setAttribute("content", isLight ? "#F7FAFF" : "#080D18");
+  qs("#themeColorMeta")?.setAttribute("content", isLight ? "#F7FAFF" : "#141414");
   if (persist) {
     themeWasChosen = true;
     try { localStorage.setItem("saad-theme", theme); } catch { /* theme still works for this visit */ }
@@ -154,31 +154,24 @@ function setupReveal() {
       }
     });
   }, { threshold: 0.12 });
-  items.forEach(item => observer.observe(item));
+  // Start the reveal animations only after the intro loader has faded, so the hero animates in visibly.
+  const begin = () => items.forEach(item => observer.observe(item));
+  if (document.body.classList.contains("is-loading")) document.addEventListener("loader:done", begin, { once: true });
+  else begin();
 }
 
 function createMockVisual(type) {
   if (type === "calculator") {
-    return `<div class="project-visual project-visual--image project-visual--calculator" aria-hidden="true"><img src="assets/images/projects/live-calculator.png" alt="" loading="lazy" decoding="async"></div>`;
-  }
-  if (type === "list") {
-    return `<div class="project-visual" aria-hidden="true"><div class="mock-list"><span></span><span></span><span></span><span></span><span></span></div></div>`;
-  }
-  if (type === "chart") {
-    const heights = [35, 60, 45, 82, 52, 72, 91, 57];
-    return `<div class="project-visual" aria-hidden="true"><div class="mock-chart">${heights.map(h => `<span data-h="${h}"></span>`).join("")}</div></div>`;
+    return `<div class="project-visual project-visual--image project-visual--calculator" aria-hidden="true"><img src="assets/images/projects/live-calculator.webp" alt="" loading="lazy" decoding="async"></div>`;
   }
   if (type === "weather") {
-    return `<div class="project-visual project-visual--image" aria-hidden="true"><img src="assets/images/projects/weather-live-preview.png" alt="" loading="lazy" decoding="async"></div>`;
+    return `<div class="project-visual project-visual--image" aria-hidden="true"><img src="assets/images/projects/weather-live-preview.webp" alt="" loading="lazy" decoding="async"></div>`;
   }
   if (type === "qr") {
     return `<div class="project-visual project-visual--image" aria-hidden="true"><img src="assets/images/projects/qr-studio.svg" alt="" loading="lazy" decoding="async"></div>`;
   }
   if (type === "portfolio") {
-    return `<div class="project-visual project-visual--image project-visual--portfolio" aria-hidden="true"><img src="assets/images/projects/live-portfolio.png" alt="" loading="lazy" decoding="async"></div>`;
-  }
-  if (type === "game") {
-    return `<div class="project-visual" aria-hidden="true"><div class="mock-game"></div></div>`;
+    return `<div class="project-visual project-visual--image project-visual--portfolio" aria-hidden="true"><img src="assets/images/projects/live-portfolio.webp" alt="" loading="lazy" decoding="async"></div>`;
   }
   return `<div class="project-visual" aria-hidden="true"><div class="mock-browser"><div class="mock-bar"><i></i><i></i><i></i></div><div class="mock-content"><div class="mock-line"></div><div class="mock-line short"></div><div class="mock-grid"><span></span><span></span><span></span></div><div class="mock-grid"><span></span><span></span><span></span></div></div></div></div>`;
 }
@@ -452,6 +445,9 @@ function setupTyping() {
     typingText.textContent = phrases[0];
     return;
   }
+  // Start from the full first phrase already shown in the HTML, then erase it and cycle.
+  charIndex = phrases[0].length;
+  deleting = true;
   const tick = () => {
     const phrase = phrases[phraseIndex];
     let delay;
@@ -468,7 +464,7 @@ function setupTyping() {
     }
     typingTimer = setTimeout(tick, delay);
   };
-  tick();
+  typingTimer = setTimeout(tick, 2500);
 }
 
 function setCurrentYear() {
@@ -510,11 +506,20 @@ function setupDepthEffects() {
 }
 
 function setupDeviceMotion() {
-  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-  if (window.matchMedia("(hover: hover) and (pointer: fine)").matches) return;
-  const MotionEvent = window.DeviceOrientationEvent;
   const portrait = qs("#heroPhotoBtn");
-  if (!MotionEvent || !portrait) return;
+  // Where motion input is not used (desktop, reduced motion, no sensor API) the portrait button does nothing,
+  // so keep it out of the tab order and describe it as the picture it is instead of an "enable" control.
+  const neutralizePortrait = () => {
+    if (!portrait) return;
+    portrait.tabIndex = -1;
+    portrait.removeAttribute("title");
+    portrait.setAttribute("role", "img");
+    portrait.setAttribute("aria-label", "Saad Sheikh wearing glasses and a cap");
+  };
+  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return neutralizePortrait();
+  if (window.matchMedia("(hover: hover) and (pointer: fine)").matches) return neutralizePortrait();
+  const MotionEvent = window.DeviceOrientationEvent;
+  if (!MotionEvent || !portrait) return neutralizePortrait();
 
   const start = () => {
   let betaOrigin = null;
@@ -547,13 +552,16 @@ function setupDeviceMotion() {
   };
 
   if (typeof MotionEvent.requestPermission === "function") {
+  let motionStarted = false;
   portrait.addEventListener("click", async () => {
+    if (motionStarted) return;
     try {
-      if (await MotionEvent.requestPermission() === "granted") start();
+      if (await MotionEvent.requestPermission() === "granted") { motionStarted = true; start(); }
+      else portrait.setAttribute("aria-label", "Motion permission was not granted. Tap to try again.");
     } catch {
-      portrait.setAttribute("aria-label", "Motion permission was not granted");
+      portrait.setAttribute("aria-label", "Motion permission was not granted. Tap to try again.");
     }
-  }, { once: true });
+  });
   } else {
   start();
   }
@@ -639,7 +647,7 @@ function setupGithub() {
 function setupOptionalSections() {
   const achGrid = qs("#achievementGrid"), tesGrid = qs("#testimonialGrid");
     if (achGrid && Array.isArray(achievements) && achievements.length) {
-    achGrid.innerHTML = achievements.map(a => `<article class="info-card"><div class="info-card__icon"><i class="fa-solid fa-award" aria-hidden="true"></i></div><span>${esc(a.year)}</span><strong>${esc(a.title)}</strong><small>${esc(a.detail)}</small></article>`).join("");
+    achGrid.innerHTML = achievements.map(a => `<div class="info-card"><div class="info-card__icon"><i class="fa-solid fa-award" aria-hidden="true"></i></div><span>${esc(a.year)}</span><strong>${esc(a.title)}</strong><small>${esc(a.detail)}</small></div>`).join("");
     qs("#achievements").hidden = false;
   }
   if (tesGrid && Array.isArray(testimonials) && testimonials.length) {
@@ -654,7 +662,7 @@ function setupCommandMenu() {
   if (!menu) return;
   const go = id => () => qs(id)?.scrollIntoView({ behavior: "smooth" });
   const commands = [
-    ["Go to Home", go("#home")], ["Go to About", go("#about")], ["Go to Skills", go("#skills")], ["Go to Journey", go("#journey")], ["Go to Goals", go("#goals")], ["Go to Projects", go("#projects")], ["Go to Contact", go("#contact")],
+    ["Go to Home", go("#home")], ["Go to About", go("#about")], ["Go to What I Do", go("#what-i-do")], ["Go to Skills", go("#skills")], ["Go to Journey", go("#journey")], ["Go to Goals", go("#goals")], ["Go to Projects", go("#projects")], ["Go to Contact", go("#contact")],
     ["Toggle dark / light theme", () => setTheme(document.documentElement.dataset.theme === "light" ? "dark" : "light")],
     ["Download CV", () => { window.location.href = "assets/cv/Saad-Sheikh-CV.pdf"; }],
     ["Open GitHub", () => window.open(siteData.github, "_blank", "noopener")],
@@ -692,10 +700,35 @@ setupCommandMenu();
 
 function setup3DInteractions() {
   const loader = qs("#siteLoader");
-  const hideLoader = () => { if(loader) loader.classList.add("is-hidden"); };
-  if(document.readyState === "complete") setTimeout(hideLoader, 450);
-  else window.addEventListener("load",()=>setTimeout(hideLoader,450),{once:true});
-  setTimeout(hideLoader, 3500);
+  const bar = loader && qs(".loader-track i", loader);
+  const pct = qs("#loaderPercent");
+  const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
+  let seen = false; try { seen = sessionStorage.getItem("saad-intro") === "1"; sessionStorage.setItem("saad-intro","1"); } catch {}
+  const MIN = reduced || seen ? 0 : 450;   // loader stays at least this long (ms) so the intro feels deliberate
+  const MAX = 3500;                   // hard safety limit
+  const start = performance.now();
+  let done = false, pageReady = document.readyState === "complete";
+  window.addEventListener("load", () => { pageReady = true; }, { once: true });
+  const finish = () => {
+    if (done) return; done = true;
+    if (bar) bar.style.setProperty("--p", 1);
+    if (pct) pct.textContent = "100%";
+    setTimeout(() => {
+      document.body.classList.remove("is-loading");
+      if (loader) loader.classList.add("is-hidden");
+      document.dispatchEvent(new Event("loader:done"));
+    }, 120);
+  };
+  const tick = () => {
+    if (done) return;
+    const t = performance.now() - start;
+    let p = Math.min(t / MIN, 1);
+    if (!pageReady) p = Math.min(p, .92);          // never show 100% before the page has really loaded
+    if (bar) bar.style.setProperty("--p", p.toFixed(3));
+    if (pct) pct.textContent = Math.round(p * 100) + "%";
+    if ((p >= 1 && pageReady) || t > MAX) finish(); else requestAnimationFrame(tick);
+  };
+  requestAnimationFrame(tick);
 
   const cursor = qs("#cursorGlow");
   if(cursor && matchMedia("(hover:hover) and (pointer:fine)").matches && !matchMedia("(prefers-reduced-motion: reduce)").matches){
@@ -847,6 +880,3 @@ function setupHeroScene() {
 setup3DInteractions();
 setupHeroScene();
 
-if ("serviceWorker" in navigator && (location.protocol === "https:" || location.hostname === "localhost")) {
-  window.addEventListener("load", () => navigator.serviceWorker.register("sw.js").catch(() => { /* optional feature */ }));
-}
