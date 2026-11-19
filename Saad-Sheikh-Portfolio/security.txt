@@ -1,6 +1,0 @@
-Contact: mailto:ahmad.saad.8420@gmail.com
-Contact: https://t.me/saadahmad9k
-Contact: https://saadsheikh.bond/contact
-Expires: 2027-11-01T00:00:00.000Z
-Preferred-Languages: en
-Canonical: https://saadsheikh.bond/.well-known/security.txt
