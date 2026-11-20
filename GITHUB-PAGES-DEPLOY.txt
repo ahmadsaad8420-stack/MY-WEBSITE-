@@ -1,0 +1,16 @@
+GitHub Pages deployment
+=======================
+
+Repository: MY-WEBSITE-
+Branch: main
+Folder: / (root)
+
+This build uses project-relative links so it works from:
+https://ahmadsaad8420-stack.github.io/MY-WEBSITE-/
+
+Privacy Policy: privacy-policy.html
+Terms: terms.html
+About: about.html
+Contact: contact.html
+
+Keep _redirects and netlify.toml for Netlify. GitHub Pages ignores those Netlify-specific routing rules.
